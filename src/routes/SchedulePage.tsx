@@ -13,6 +13,8 @@ export default function SchedulePage() {
       <div className="mb-4">
         <label className="block text-sm font-medium mb-2">日付を選択</label>
         <div className="relative">
+          {/* 日付選択機能を、NewBokkingPage.tsxの<DateSelect value={selectedDate} onChange={setSelectedDate} />のように、コンポーネント化していないのは、V2→V3のリファクタリングの過程で発生したもの。本来なら、このファイルでも同じコンポーネントを読み込むべき。ただしそうする場合、
+          {selectedDate === todayISO() && '今日'}  の扱いをコンポーネント側で調整必要 */}
           <input
             type="date"
             min={todayISO()}

@@ -13,7 +13,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
   const navigate = useNavigate()
 
-  // ↓selectedDate は useState ではなく URL の ?date= から読み書きする
+  // ↓selectedDate は useState ではなく URL の ?date= から読み書きする。useSearchParams() は react-router が提供するフック(Hook)で、URLの「クエリパラメータ(?以降の部分)」を読み書きするための機能。
   const [searchParams, setSearchParams] = useSearchParams()
   const selectedDate = searchParams.get('date') ?? todayISO()
   const setSelectedDate = (date: string) => setSearchParams({ date })
@@ -85,7 +85,6 @@ function App() {
   const linkWithDate = (pathname: string) => ({
     pathname,
     search: searchParams.toString(),
-    // search: は React Router が提供するローケションオブジェクト(現在のURLに関する情報（パス、クエリ、ステートなど）を保持するオブジェクト)
     // useSearchParams は React Routerのフック（hook）で、URLのクエリパラメータを読み書きする。
     // http://localhost:5173/new?date=2026-08-23
     //                        ↓      ↓
@@ -128,6 +127,7 @@ function App() {
       : 'px-4 py-2 text-gray-500 hover:text-gray-700'
 
   const bookingContext: BookingContext = {
+    // ↓短縮記法 プロパティ名と変数名が同じ時だけ片方を省略できる。短縮せずに書くと、rooms: rooms,
     rooms,
     bookings,
     selectedDate,
@@ -145,11 +145,12 @@ function App() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">会議室予約アプリ ver2（react-router版）</h1>
+      <h1 className="text-3xl font-bold mb-8"> ver3（react-router版）</h1>
 
       {/* タブバー：NavLink の isActive で選択中スタイルを当てる */}
       <div className="flex border-b mb-6">
-      {/*NavLinkは React Routerが提供するコンポーネント。内部的には<a>タグになる。クリック時にevent.preventDefault()を自動実行し、ページリロードなしでURL切り替え。to=の path を比較し、その結果を classNameに渡す関数の引数として渡す。 Linkコンポーネントとの違いは、URLの変更だけではく、URLの判定も行うという点*/}
+      {/*NavLinkは React Routerが提供するコンポーネント。内部的には<a>タグになる。クリック時にevent.preventDefault()を自動実行し、ページリロードなしでURL切り替え。to=の path を比較し、その結果を classNameに渡す関数の引数として渡す。 Linkコンポーネントとの違いは、URLの変更だけではく、URLの判定も行うという点。LinkタグNavLinkタブ、共に、to={}の中身が文字列ならそのまま使う。オブジェクトなら、各プロパティを文字列としてつなぎ合わせる。
+      今回の場合、Linkタグでもタブ切り替え、URL切りかえとしては動作するが、クラス名の切り替えが動かない。/}
       {/* to={linkWithDate('/new')}
         toプロパティ = 遷移先のパスを指定　linkWithDate('/new') = 関数呼び出し
         このプロジェクトで定義されている関数で、現在の日付をクエリパラメータとして自動的に追加： */}
@@ -161,6 +162,10 @@ function App() {
         </NavLink>
       </div>
 
+      {/* Outlet は英語で「出口・コンセント差込口」です。React Router では:
+      「ここに子ルートのコンポーネントを描画してください」という場所の目印
+      App.tsx:164 の位置に、URLに応じた子が入ります: */}
+      {/* Outlet が値を Provider に置き、子ルート（NewBookingPage / SchedulePage）が useOutletContext() で読みに行く。 */}
       <Outlet context={bookingContext} />
 
       {editingBooking && (
