@@ -7,21 +7,22 @@ import BookingForm from '../components/BookingForm'
 
 export default function NewBookingPage() {
   // ↓useOutletContext は型推論されないので、型引数を自分で指定する必要がある
-  // const { rooms, selectedDate, setSelectedDate, onBookingCreated, errorMessage, onErrorChange } =
-  //   useOutletContext<BookingContext>()
+  const { rooms, selectedDate, setSelectedDate, onBookingCreated, errorMessage, onErrorChange } =
+    useOutletContext<BookingContext>()
 // 　↓分割代入使用せずにかいたら
-  const context = useOutletContext<BookingContext>()
+  // const context = useOutletContext<BookingContext>()
   
-  const rooms = context.rooms
-  const selectedDate = context.selectedDate
-  const setSelectedDate = context.setSelectedDate
-  const onBookingCreated = context.onBookingCreated
-  const errorMessage = context.errorMessage
-  const onErrorChange = context.onErrorChange
+  // const rooms = context.rooms
+  // const selectedDate = context.selectedDate
+  // const setSelectedDate = context.setSelectedDate
+  // const onBookingCreated = context.onBookingCreated
+  // const errorMessage = context.errorMessage
+  // const onErrorChange = context.onErrorChange
   
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">予約を作成</h2>
+      {/* {}の中はJSX onChange={setSelectedDate} で、setSelectedDate関数をonChangeに代入したことにより、onChange()関数となる。これはJSの機能*/}
       <DateSelect value={selectedDate} onChange={setSelectedDate} />
       <BookingForm
         rooms={rooms}

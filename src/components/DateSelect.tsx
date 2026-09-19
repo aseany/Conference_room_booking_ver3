@@ -2,6 +2,7 @@ import { formatWeekday, todayISO } from '../utils/datetime'
 
 interface DateSelectProps {
   value: string
+// onChange	props の名前。 (date: string)	引数を1つ取る。名前は date、型は文字列。void	何も返さない(返り値がない)URL を書き換える関数なので、返り値はない。
   onChange: (date: string) => void
   label?: string
 }
@@ -16,6 +17,7 @@ export default function DateSelect({ value, onChange, label = "日付" }: DateSe
           type="date"
           min={todayISO()}
           value={value}
+          // onChnage値がかわったらこの処理を実行　という意味htmlではonchange ReactではonChange と書く
           onChange={(e) => onChange(e.target.value)}
           className="border p-2 rounded w-full"
         />
